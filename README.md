@@ -130,6 +130,14 @@ The frontend is configured to proxy API requests to the backend.
 
 ---
 
+## Testing
+
+The backend includes:
+- unit tests for loan decision business logic
+- integration tests for the REST endpoint and validation/error handling
+
+---
+
 ## Assumptions
 
 - Personal codes outside the predefined list are treated as invalid input
