@@ -46,7 +46,7 @@ public class LoanDecisionService {
             return selectedPeriodDecision;
         }
 
-        LoanDecisionResult alternativePeriodDecision = findBestAlternativePeriod(request, creditProfile);
+        LoanDecisionResult alternativePeriodDecision = findNearestAlternativePeriod(request, creditProfile);
         if (alternativePeriodDecision != null) {
             return alternativePeriodDecision;
         }
@@ -70,36 +70,27 @@ public class LoanDecisionService {
         );
     }
 
-    private LoanDecisionResult findBestAlternativePeriod(LoanDecisionRequest request, CreditProfile creditProfile) {
-        Integer bestAmount = null;
-        Integer bestPeriod = null;
-
-        for (int period = MIN_LOAN_PERIOD; period <= MAX_LOAN_PERIOD; period++) {
+    private LoanDecisionResult findNearestAlternativePeriod(
+            LoanDecisionRequest request,
+            CreditProfile creditProfile
+    ) {
+        for (int period = request.loanPeriodMonths() + 1; period <= MAX_LOAN_PERIOD; period++) {
             Integer approvedAmount = calculateApprovedAmount(creditProfile.creditModifier(), period);
 
             if (approvedAmount == null) {
                 continue;
             }
 
-            if (bestAmount == null
-                    || approvedAmount > bestAmount
-                    || (approvedAmount.equals(bestAmount) && period < bestPeriod)) {
-                bestAmount = approvedAmount;
-                bestPeriod = period;
-            }
+            return new LoanDecisionResult(
+                    Decision.POSITIVE,
+                    approvedAmount,
+                    period,
+                    request.loanAmount(),
+                    request.loanPeriodMonths()
+            );
         }
 
-        if (bestAmount == null) {
-            return null;
-        }
-
-        return new LoanDecisionResult(
-                Decision.POSITIVE,
-                bestAmount,
-                bestPeriod,
-                request.loanAmount(),
-                request.loanPeriodMonths()
-        );
+        return null;
     }
 
     private Integer calculateApprovedAmount(int creditModifier, int loanPeriodMonths) {
