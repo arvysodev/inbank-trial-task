@@ -16,6 +16,13 @@ public class CreditProfileService {
             "49002010998", new CreditProfile("49002010998", false, 1000)
     );
 
+    /**
+     * Retrieves the credit profile for a given personal code.
+     *
+     * @param personalCode unique identifier of the customer
+     * @return credit profile containing debt status and credit modifier
+     * @throws UnknownPersonalCodeException if no profile is found
+     */
     public CreditProfile getCreditProfile(String personalCode) {
         CreditProfile profile = CREDIT_PROFILES.get(personalCode);
 

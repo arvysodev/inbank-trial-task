@@ -20,6 +20,20 @@ public class LoanDecisionService {
         this.creditProfileService = creditProfileService;
     }
 
+    /**
+     * Processes a loan decision request and returns the calculated result.
+     * <p>
+     * The decision flow:
+     * <ul>
+     *     <li>Retrieve customer's credit profile</li>
+     *     <li>Reject if customer has active debt</li>
+     *     <li>Attempt to calculate offer for requested period</li>
+     *     <li>If not possible, search for best alternative period</li>
+     * </ul>
+     *
+     * @param request loan decision request
+     * @return loan decision result containing approval status and offer details
+     */
     public LoanDecisionResult decide(LoanDecisionRequest request) {
         CreditProfile creditProfile = creditProfileService.getCreditProfile(request.personalCode());
 

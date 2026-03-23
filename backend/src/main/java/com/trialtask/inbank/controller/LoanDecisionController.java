@@ -25,6 +25,13 @@ public class LoanDecisionController {
         this.loanDecisionMapper = loanDecisionMapper;
     }
 
+    /**
+     * Evaluates a loan application and returns the decision result.
+     *
+     * @param request the loan decision request containing personal code,
+     *                requested amount, and loan period
+     * @return loan decision response with approval status and approved offer if applicable
+     */
     @Operation(summary = "Calculate loan decision based on personal code and request parameters")
     @PostMapping("/decision")
     public LoanDecisionResponse decide(@Valid @RequestBody LoanDecisionRequest request) {
