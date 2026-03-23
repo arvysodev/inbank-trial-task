@@ -4,9 +4,12 @@ import com.trialtask.inbank.dto.request.LoanDecisionRequest;
 import com.trialtask.inbank.dto.response.LoanDecisionResponse;
 import com.trialtask.inbank.mapper.LoanDecisionMapper;
 import com.trialtask.inbank.service.LoanDecisionService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Loan Decision API", description = "Loan decision calculation endpoints")
 @RestController
 @RequestMapping("/api/loan")
 public class LoanDecisionController {
@@ -22,6 +25,7 @@ public class LoanDecisionController {
         this.loanDecisionMapper = loanDecisionMapper;
     }
 
+    @Operation(summary = "Calculate loan decision based on personal code and request parameters")
     @PostMapping("/decision")
     public LoanDecisionResponse decide(@Valid @RequestBody LoanDecisionRequest request) {
         return loanDecisionMapper.toResponse(loanDecisionService.decide(request));
